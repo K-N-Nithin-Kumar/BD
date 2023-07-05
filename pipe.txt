@@ -1,0 +1,78 @@
+db.posts.aggregate([
+  {
+    $match: { likes: { $gt: 1 } }
+  },
+  {
+    $group: { _id: "$category", totalLikes: { $sum: "$likes" } }
+  }
+])
+////////////////////////////////////////
+db.movies.aggregate([ { $limit: 1 } ])
+////////////////////////////////////////////
+db.restaurants.aggregate([
+  {
+    $project: {
+      "name": 1,
+      "cuisine": 1,
+      "address": 1
+    }
+  },
+  {
+    $limit: 5
+  }
+])
+//////////////////////
+db.listingsAndReviews.aggregate([ 
+  { 
+    $sort: { "accommodates": -1 } 
+  },
+  {
+    $project: {
+      "name": 1,
+      "accommodates": 1
+    }
+  },
+  {
+    $limit: 5
+  }
+])
+
+///////////////////////////////////
+db.listingsAndReviews.aggregate([ 
+  { $match : { property_type : "House" } },
+  { $limit: 2 },
+  { $project: {
+    "name": 1,
+    "bedrooms": 1,
+    "price": 1
+  }}
+])
+////////////////////////
+db.restaurants.aggregate([
+  {
+    $addFields: {
+      avgGrade: { $avg: "$grades.score" }
+    }
+  },
+  {
+    $project: {
+      "name": 1,
+      "avgGrade": 1
+    }
+  },
+  {
+    $limit: 5
+  }
+])
+/////////////////////////////
+db.restaurants.aggregate([
+  {
+    $match: { "cuisine": "Chinese" }
+  },
+  {
+    $count: "totalChinese"
+  }
+])
+///////////////////
+
+
